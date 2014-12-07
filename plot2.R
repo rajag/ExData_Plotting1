@@ -6,3 +6,4 @@ par(mar=c(2,4,2,2))
 plot(x,y, type ="l",xlab="",ylab="Global Active Power (kilowatts)",main="")
 dev.copy(png,file="plot2.png",width = 480, height = 480)
 dev.off()
+ 

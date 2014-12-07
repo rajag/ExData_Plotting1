@@ -1,23 +1,36 @@
-#Plot4 
-Alldata <- read.csv("household_power_consumption.txt", sep=";", na.strings="?")
-DataForFebFirstTwodays <- subset(Alldata,Date %in% c("1/2/2007","2/2/2007"))
-library(reshape2)
-reshapedata <- melt(DataForFebFirstTwodays,id=c("Date","Time"),measure.vars=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"))
-x <- as.POSIXlt(paste(DataForFebFirstTwodays$Date, DataForFebFirstTwodays$Time), format="%d/%m/%Y %H:%M:%S")
-z <- as.POSIXlt(paste(reshapedata$Date, reshapedata$Time), format="%d/%m/%Y %H:%M:%S")
-y <- reshapedata$value
-par(mar=c(4,4,2,2))
-par(mfrow=c(2,2))
-with(DataForFebFirstTwodays,{
-    plot(x,DataForFebFirstTwodays$Global_active_power, type ="l",xlab="",ylab="Global Active Power",main="")
-    plot(x,DataForFebFirstTwodays$Voltage, type ="l",xlab="Datetime",ylab="Voltage",main="")
-    with(reshapedata,plot(z,value, type ="l",xlab="",ylab="Energy sub metering",main=""))
-    with(subset(reshapedata,variable == "Sub_metering_1"),lines(z,y,col="black"))
-    with(subset(reshapedata,variable == "Sub_metering_2"),lines(z,y,col="red"))
-    with(subset(reshapedata,variable == "Sub_metering_3"),lines(z,y,col="blue"))
-    legend("topright",pch="-",col=c("black","red","blue"),legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"))
-    plot(x,DataForFebFirstTwodays$Global_reactive_power, type ="l",xlab="Datetime",ylab="Global_reactive_power",main="")
-})
-dev.copy(png,file="plot4.png",width = 480, height = 480)
+#Load File into dataset data
+file <- "household_power_consumption.txt"
+data <- read.table(file, sep=";", header=TRUE, na.strings="?")
+
+#subset data for days 2007-02-01 and 2007-02-02
+data <- data[grep("^1/2/2007$|^2/2/2007$",data$Date),]
+
+#convert Date and Time column to Date class and store it in Date column
+data$Date <- strptime(paste(data$Date,data$Time), "%d/%m/%Y %H:%M:%S")
+
+#set english locale to get weekdays in english
+Sys.setlocale("LC_ALL", "en_US")
+
+#set layout
+par(mfcol=c(2,2))
+
+#make plot in top left
+plot(data$Date,data$Global_active_power, type="l",ylab="Global Active Power",xlab="")
+
+
+#make plot in top left, legend border not visible, legend font adjusted
+plot(data$Date,data$Sub_metering_1, type="l",ylab="Energy sub metering",xlab="")
+lines(data$Date,data$Sub_metering_2, type="l", col="red")
+lines(data$Date,data$Sub_metering_3, type="l", col="blue")
+legend("topright", box.lwd=0, legend=names(data[7:9]), lty=1, col=c("black","red","blue"), cex=0.7)
+
+#make plot in top right
+plot(data$Date,data$Voltage, type="l",ylab="Voltage",xlab="datetime")
+
+#make plot in top right
+plot(data$Date,data$Global_reactive_power, type="l",ylab="Global_reactive_power",xlab="datetime")
+
+#copy graphic device to file
+dev.copy(png,file="plot4.png")
 dev.off()
 
