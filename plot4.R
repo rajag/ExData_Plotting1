@@ -1,4 +1,4 @@
-#Load File into dataset data
+#Load File into dataset data 
 file <- "household_power_consumption.txt"
 data <- read.table(file, sep=";", header=TRUE, na.strings="?")
 
@@ -33,4 +33,4 @@ plot(data$Date,data$Global_reactive_power, type="l",ylab="Global_reactive_power"
 #copy graphic device to file
 dev.copy(png,file="plot4.png")
 dev.off()
-
+#Done

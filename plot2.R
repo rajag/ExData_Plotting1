@@ -1,4 +1,5 @@
-Alldata <- read.csv("household_power_consumption.txt", sep=";", na.strings="?")
+#plot2.R 
+Alldata <- read.csv("household_power_consumption.txt", sep=";", na.strings="?") 
 DataForFebFirstTwodays <- subset(Alldata,Date %in% c("1/2/2007","2/2/2007"))
 x <- as.POSIXlt(paste(DataForFebFirstTwodays$Date, DataForFebFirstTwodays$Time), format="%d/%m/%Y %H:%M:%S")
 y <- DataForFebFirstTwodays$Global_active_power

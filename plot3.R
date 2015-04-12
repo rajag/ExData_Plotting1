@@ -18,4 +18,5 @@ lines(data$Date,data$Sub_metering_3, type="l", col="blue")
 legend("topright", legend=names(data[7:9]), lty=1, col=c("black","red","blue"))
 dev.copy(png,file="plot3.png")
 dev.off()
+#Done
 
